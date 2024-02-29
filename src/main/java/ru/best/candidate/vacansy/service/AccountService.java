@@ -2,10 +2,16 @@ package ru.best.candidate.vacansy.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.best.candidate.vacansy.model.AccountModel;
+import ru.best.candidate.vacansy.controller.mapper.ConvertMapper;
+import ru.best.candidate.vacansy.dto.AccountDto;
+import ru.best.candidate.vacansy.entity.AccountEntity;
+import ru.best.candidate.vacansy.entity.UserEntity;
 import ru.best.candidate.vacansy.repository.AccountRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -13,29 +19,32 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
 
-    public List<AccountModel> findAll() {
-      //  return accountRepository.findAll();
-        return null;
+    public List<AccountDto> findAll() {
+        List<AccountEntity> accountEntities = accountRepository.findAll();
+        return accountEntities.stream().map(it->ConvertMapper.accountEntityToDto(it)).collect(Collectors.toList());
     }
 
-    public AccountModel findById(Long id) {
-     //   return accountRepository.findById(id);
-        return null;
+    public AccountDto findById(Long id) {
+    AccountEntity accountEntity = accountRepository.findById(id).orElseThrow(()->new NoSuchElementException(String.format("account with id - %s was not found", id)));
+        return ConvertMapper.accountEntityToDto(accountEntity);
     }
 
-    public AccountModel save(AccountModel accountModel) {
-        return accountRepository.save(accountModel);
+    public AccountDto save(AccountDto accountDto) {
+        AccountEntity accountEntity = ConvertMapper.accountDtoToEntity(accountDto);
+        return ConvertMapper.accountEntityToDto(accountEntity);
     }
 
-    public AccountModel update(AccountModel accountModel) {
-        AccountModel modelDB = findById(accountModel.getId());
+    public AccountDto update(AccountDto accountDto) {
+        AccountDto modelDB = findById(accountDto.getId());
         if (modelDB==null) {
             //todo throws new exception!!
             return null;
         } else {
-            accountRepository.save(accountModel);
+            accountDto.setId(modelDB.getId());
+            deleteById(modelDB.getId());
+            save(accountDto);
         }
-        return accountModel;
+        return accountDto;
     }
 
     public void deleteById(Long id) {

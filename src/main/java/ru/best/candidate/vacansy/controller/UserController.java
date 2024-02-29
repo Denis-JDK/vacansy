@@ -2,8 +2,7 @@ package ru.best.candidate.vacansy.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.best.candidate.vacansy.model.AccountModel;
-import ru.best.candidate.vacansy.model.UserModel;
+import ru.best.candidate.vacansy.dto.UserDto;
 import ru.best.candidate.vacansy.service.UserService;
 
 import java.util.List;
@@ -15,21 +14,21 @@ public class UserController {
 
     private final UserService userService;
     @GetMapping
-    public List<UserModel> findAll() {
+    public List<UserDto> findAll() {
         return userService.findAll();
     }
 
     @GetMapping("/{id}")
-    public UserModel findById(@PathVariable Long id) {
+    public UserDto findById(@PathVariable Long id) {
         return userService.findById(id);
     }
     @PostMapping
-    public UserModel createUserModel(@RequestBody UserModel userModel) {
+    public UserDto createUserModel(@RequestBody UserDto userModel) {
         return userService.save(userModel);
     }
 
     @PutMapping
-    public UserModel updateUserModel(@RequestBody UserModel userModel) {
+    public UserDto updateUserModel(@RequestBody UserDto userModel) {
         return userService.update(userModel);
     }
     @DeleteMapping("/{id}")
