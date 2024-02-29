@@ -22,4 +22,23 @@ public class AccountService {
      //   return accountRepository.findById(id);
         return null;
     }
+
+    public AccountModel save(AccountModel accountModel) {
+        return accountRepository.save(accountModel);
+    }
+
+    public AccountModel update(AccountModel accountModel) {
+        AccountModel modelDB = findById(accountModel.getId());
+        if (modelDB==null) {
+            //todo throws new exception!!
+            return null;
+        } else {
+            accountRepository.save(accountModel);
+        }
+        return accountModel;
+    }
+
+    public void deleteById(Long id) {
+        accountRepository.deleteById(id);
+    }
 }

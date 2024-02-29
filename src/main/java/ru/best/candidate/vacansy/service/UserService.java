@@ -11,9 +11,32 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository repository;
+    private final UserRepository userRepository;
 
     public List<UserModel> findAll() {
-        return repository.findAll();
+        return userRepository.findAll();
+    }
+
+    public UserModel findById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    public UserModel save(UserModel userModel) {
+        return userRepository.save(userModel);
+    }
+
+    public UserModel update(UserModel userModel) {
+        UserModel modelDB = findById(userModel.getId());
+        if (modelDB==null) {
+            //todo throws new exception!!
+            return null;
+        } else {
+            userRepository.save(userModel);
+        }
+        return userModel;
+    }
+
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
     }
 }

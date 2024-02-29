@@ -1,9 +1,8 @@
 package ru.best.candidate.vacansy.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import ru.best.candidate.vacansy.model.AccountModel;
 import ru.best.candidate.vacansy.model.UserModel;
 import ru.best.candidate.vacansy.service.UserService;
 
@@ -18,6 +17,24 @@ public class UserController {
     @GetMapping
     public List<UserModel> findAll() {
         return userService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public UserModel findById(@PathVariable Long id) {
+        return userService.findById(id);
+    }
+    @PostMapping
+    public UserModel createUserModel(@RequestBody UserModel userModel) {
+        return userService.save(userModel);
+    }
+
+    @PutMapping
+    public UserModel updateUserModel(@RequestBody UserModel userModel) {
+        return userService.update(userModel);
+    }
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable Long id) {
+        userService.deleteById(id);
     }
 
 }
