@@ -1,10 +1,10 @@
 package ru.best.candidate.vacansy.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.best.candidate.vacansy.controller.mapper.ConvertMapper;
 import ru.best.candidate.vacansy.dto.UserDto;
-import ru.best.candidate.vacansy.entity.AccountEntity;
 import ru.best.candidate.vacansy.entity.UserEntity;
 import ru.best.candidate.vacansy.repository.UserRepository;
 
@@ -19,7 +19,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     public List<UserDto> findAll() {
-        List<UserEntity> userEntities = userRepository.findAll();
+        List<UserEntity> userEntities = userRepository.findAll(PageRequest.of(0,5)).getContent();
         return userEntities.stream().map(it->ConvertMapper.userEntityToDto(it)).collect(Collectors.toList());
     }
 
